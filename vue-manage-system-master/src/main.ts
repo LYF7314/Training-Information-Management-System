@@ -6,6 +6,7 @@ import router from './router';
 import { usePermissStore } from './store/permiss';
 import 'element-plus/dist/index.css';
 import './assets/css/icon.css';
+import axios from 'axios';
 
 const app = createApp(App);
 app.use(createPinia());
@@ -24,5 +25,7 @@ app.directive('permiss', {
         }
     },
 });
-
+// 将axios加入全局变量
+axios.defaults.baseURL = '/api';
+app.config.globalProperties.$http = axios;
 app.mount('#app');
