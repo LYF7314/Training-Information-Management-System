@@ -17,7 +17,7 @@
 						</template>
 					</el-table-column>
                     <el-table-column width="120">
-                        <el-button size="small" @click="">同意</el-button>
+                        <el-button size="small" type="primary" @click="">同意</el-button>
                     </el-table-column>
 				</el-table>
 				<div class="handle-row">
@@ -32,8 +32,8 @@
 								<span class="message-title">{{ scope.row.title }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column prop="date" width="150"></el-table-column>
-						<el-table-column width="120">
+						<el-table-column prop="date" width="160"></el-table-column>
+						<el-table-column width="100">
 							<template #default="scope">
 								<el-button type="danger" @click="handleDel(scope.$index)">删除</el-button>
 							</template>
@@ -44,7 +44,7 @@
 					</div>
 				</template>
 			</el-tab-pane>
-			<el-tab-pane :label="`回收站(${state.recycle.length})`" name="third">
+			<!-- <el-tab-pane :label="`回收站(${state.recycle.length})`" name="third">
 				<template v-if="message === 'third'">
 					<el-table :data="state.recycle" :show-header="false" style="width: 100%">
 						<el-table-column>
@@ -63,7 +63,7 @@
 						<el-button type="danger">清空回收站</el-button>
 					</div>
 				</template>
-			</el-tab-pane>
+			</el-tab-pane> -->
 		</el-tabs>
 	</div>
 </template>
