@@ -152,9 +152,27 @@ const items = [
     },
     {
         icon: 'Reading',
-        index: '/course',
+        index: '/courseInfo',
         title: '课程管理',
         permiss: '15',
+    },
+    {
+        icon:'User',
+        index:'/studentInfo',
+        title:'学生管理',
+        permiss:'15',
+    },
+    {
+        icon:'Avatar',
+        index:'/teacherInfo',
+        title:'教师管理',
+        permiss:'15',
+    },
+    {
+        icon:'Message',
+        index:'/messageList',
+        title:'消息列表',
+        permiss:'15',
     },
 ];
 

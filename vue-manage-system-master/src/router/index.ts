@@ -138,13 +138,40 @@ const routes: RouteRecordRaw[] = [
                 component: () => import(/* webpackChunkName: "import" */ '../views/import.vue'),
             },
             {
-                path: '/course',
-                name: 'course',
+                path: '/courseInfo',
+                name: 'courseInfo',
                 meta: {
                     title: '课程管理',
                     permiss: '15',
                 },
-                component: () => import(/* webpackChunkName: "import" */ '../views/course.vue'),
+                component: () => import(/* webpackChunkName: "import" */ '../views/executor/course.vue'),
+            },
+            {
+                path: '/studentInfo',
+                name: 'studentInfo',
+                meta: {
+                    title: '学生管理',
+                    permiss: '15',
+                },
+                component: () => import(/* webpackChunkName: "import" */ '../views/executor/student.vue'),
+            },
+            {
+                path: '/teacherInfo',
+                name: 'teacherInfo',
+                meta: {
+                    title: '教师管理',
+                    permiss: '15',
+                },
+                component: () => import(/* webpackChunkName: "import" */ '../views/executor/teacher.vue'),
+            },
+            {
+                path: '/messageList',
+                name: 'messageList',
+                meta: {
+                    title: '消息列表',
+                    permiss: '15',
+                },
+                component: () => import(/* webpackChunkName: "import" */ '../views/executor/message.vue'),
             },
         ],
     },
