@@ -176,7 +176,7 @@ interface course{
   endTime: string,
   location: string,
   company: string,
-  cost: number
+  cost: number|null
 }
 
 const query = reactive({
@@ -196,7 +196,8 @@ const newCourse: course = reactive({
   startTime: "",
   endTime: "",
   location: "",
-  company: ""
+  company: "",
+  cost:null
 })
 // 获取表格数据
 const getData = () => {
