@@ -200,20 +200,6 @@ const items = [
     },
 
     {
-        icon:'Message',
-        index:'/studentMessage',
-        title:'学员消息',
-        permiss:'15',
-    },
-
-    {
-        icon:'Message',
-        index:'/managerMessage',
-        title:'经理消息',
-        permiss:'15',
-    },
-
-    {
         icon:'DocumentAdd',
         index:'/managerNotification',
         title:'课程设置',

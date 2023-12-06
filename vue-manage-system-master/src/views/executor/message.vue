@@ -31,13 +31,13 @@
 						<el-table-column prop="sendTime" width="160"></el-table-column>
 						<el-table-column width="150">
 							<template #default="scope">
-								<el-button :style="acceptButtonStyle(scope.row.accepted)" size="small" type="primary" @click="handleAccept(scope.row.messageId)">同意</el-button>
+								<el-button :style="acceptButtonStyle(scope.row.accepted)" size="small" type="primary" @click="handleAccept(scope.row.messageId)">{{getButtonName(scope.row)}}</el-button>
 								<el-button size="small" type="danger" @click="handleDel(scope.row.messageId)">删除</el-button>
 							</template>
 						</el-table-column>
 					</el-table>
 					<div class="handle-row">
-						<el-button type="danger">删除全部</el-button>
+						<el-button @click="allDelete" type="danger">删除全部</el-button>
 					</div>
 				</template>
 			</el-tab-pane>
@@ -154,6 +154,7 @@ const readDetail=(msgId:number)=>{
 const nums = ref<any>([]);
 
 const allRead = ()=>{
+	nums.value = []
 	unreadMessages.value.forEach((item:any)=>{
 		nums.value.push(item.messageId);
 	})
@@ -173,6 +174,42 @@ const allRead = ()=>{
 	.catch(() => {
 		ElMessage.error('服务器访问异常');
 	});
+}
+
+const allDelete=()=>{
+	nums.value = []
+	readMessages.value.forEach((item:any)=>{
+		nums.value.push(item.messageId);
+	})
+	instance?.appContext.config.globalProperties.$http.post('/message/deleteList',{nums:nums.value})
+	.then((res: any) => {
+		if(res.data.status ===0){
+			// 分拣消息
+			ElMessage.success("全部删除成功");
+			getMessage();
+		}
+		else{
+			ElMessage.error(res.data.msg);
+		}
+	})
+	.catch(() => {
+		ElMessage.error('服务器访问异常');
+	});
+}
+
+const getButtonName = (msg:any)=>{
+	switch (msg.type) {
+		case 0:
+			return '同意'
+		case 1:
+			return '缴费'
+		case 2:
+			return '签到'
+		case 3:
+			return '评教'
+		default:
+			break;
+	}
 }
 
 const acceptButtonStyle = (isAccepted:boolean)=>{
