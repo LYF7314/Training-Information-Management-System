@@ -10,9 +10,9 @@
 						</template>
 					</el-table-column>
 					<el-table-column prop="sendTime" width="180"></el-table-column>
-					<el-table-column width="200">
+					<el-table-column width="100">
 						<template #default="scope">
-							<el-button size="small" type="primary" @click="">同意</el-button>
+							<!-- <el-button size="small" type="primary" @click="">同意</el-button> -->
 							<el-button size="small" @click="handleRead(scope.$index)">标为已读</el-button>
 						</template>
 					</el-table-column>
@@ -47,12 +47,6 @@
 			<el-dialog title="消息详细" v-model="isDeatilShow" width="30%">
 				<h2>{{ curMsg.title }}</h2>
 				<p id="contentDetail">&nbsp;&nbsp;{{ curMsg.content }}</p>
-				<template #footer>
-					<span class="dialog-footer">
-					<el-button @click="isDeatilShow = false">取 消</el-button>
-					<el-button type="primary" @click="" >{{ curMsg.button }}</el-button>
-					</span>
-				</template>
 			</el-dialog>
 
 		</el-tabs>
@@ -63,30 +57,36 @@
 import { ElMessage } from 'element-plus';
 import { ref, reactive,getCurrentInstance } from 'vue';
 
-const message = ref('first');
+// const message = ref('first');
+// const state = reactive({
+// 	unread: [
+// 		{
+// 			date: '2018-04-19 20:00:00',
+// 			title: '【系统通知】该系统将于今晚凌晨2点到5点进行升级维护'
+// 		},
+// 		{
+// 			date: '2018-04-19 21:00:00',
+// 			title: '今晚12点整发大红包，先到先得'
+// 		}
+// 	],
+// 	read: [
+// 		{
+// 			date: '2018-04-19 20:00:00',
+// 			title: '【系统通知】该系统将于今晚凌晨2点到5点进行升级维护'
+// 		}
+// 	],
+// 	recycle: [
+// 		{
+// 			date: '2018-04-19 20:00:00',
+// 			title: '【系统通知】该系统将于今晚凌晨2点到5点进行升级维护'
+// 		}
+// 	]
+// });
+
 const state = reactive({
-	unread: [
-		{
-			date: '2018-04-19 20:00:00',
-			title: '【系统通知】该系统将于今晚凌晨2点到5点进行升级维护'
-		},
-		{
-			date: '2018-04-19 21:00:00',
-			title: '今晚12点整发大红包，先到先得'
-		}
-	],
-	read: [
-		{
-			date: '2018-04-19 20:00:00',
-			title: '【系统通知】该系统将于今晚凌晨2点到5点进行升级维护'
-		}
-	],
-	recycle: [
-		{
-			date: '2018-04-19 20:00:00',
-			title: '【系统通知】该系统将于今晚凌晨2点到5点进行升级维护'
-		}
-	]
+  unread: [],
+  read: [],
+  recycle: []
 });
 
 const messages = ref<any[]>([]);

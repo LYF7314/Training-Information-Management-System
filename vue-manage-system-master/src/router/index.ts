@@ -200,6 +200,15 @@ const routes: RouteRecordRaw[] = [
                 },
                 component: () => import(/* webpackChunkName: "import" */ '../views/student/message.vue'),
             },
+            {
+                path: '/managerMessage',
+                name: 'managerMessage',
+                meta: {
+                    title: '经理消息',
+                    permiss: '15',
+                },
+                component: () => import(/* webpackChunkName: "import" */ '../views/manager/message.vue'),
+            },
         ],
     },
     {

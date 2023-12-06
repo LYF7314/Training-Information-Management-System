@@ -62,35 +62,37 @@ const items = [
         title: '系统首页',
         permiss: '1',
     },
-    {
-        icon: 'Calendar',
-        index: '1',
-        title: '表格相关',
-        permiss: '2',
-        subs: [
-            {
-                index: '/table',
-                title: '常用表格',
-                permiss: '2',
-            },
-            {
-                index: '/import',
-                title: '导入Excel',
-                permiss: '2',
-            },
-            {
-                index: '/export',
-                title: '导出Excel',
-                permiss: '2',
-            },
-        ],
-    },
-    {
-        icon: 'DocumentCopy',
-        index: '/tabs',
-        title: 'tab选项卡',
-        permiss: '3',
-    },
+    // {
+    //     icon: 'Calendar',
+    //     index: '1',
+    //     title: '表格相关',
+    //     permiss: '2',
+    //     subs: [
+    //         {
+    //             index: '/table',
+    //             title: '常用表格',
+    //             permiss: '2',
+    //         },
+    //         {
+    //             index: '/import',
+    //             title: '导入Excel',
+    //             permiss: '2',
+    //         },
+    //         {
+    //             index: '/export',
+    //             title: '导出Excel',
+    //             permiss: '2',
+    //         },
+    //     ],
+    // },
+
+    // {
+    //     icon: 'DocumentCopy',
+    //     index: '/tabs',
+    //     title: 'tab选项卡',
+    //     permiss: '3',
+    // },
+
     {
         icon: 'Edit',
         index: '3',
@@ -126,70 +128,88 @@ const items = [
             },
         ],
     },
-    {
-        icon: 'Setting',
-        index: '/icon',
-        title: '自定义图标',
-        permiss: '10',
-    },
-    {
-        icon: 'PieChart',
-        index: '/charts',
-        title: 'schart图表',
-        permiss: '11',
-    },
+
+    // {
+    //     icon: 'Setting',
+    //     index: '/icon',
+    //     title: '自定义图标',
+    //     permiss: '10',
+    // },
+
+    // {
+    //     icon: 'PieChart',
+    //     index: '/charts',
+    //     title: 'schart图表',
+    //     permiss: '11',
+    // },
+
     {
         icon: 'Warning',
         index: '/permission',
         title: '权限管理',
         permiss: '13',
     },
-    {
-        icon: 'CoffeeCup',
-        index: '/donate',
-        title: '支持作者',
-        permiss: '14',
-    },
+
+    // {
+    //     icon: 'CoffeeCup',
+    //     index: '/donate',
+    //     title: '支持作者',
+    //     permiss: '14',
+    // },
+
     {
         icon: 'Reading',
         index: '/courseInfo',
         title: '课程管理',
         permiss: '15',
     },
+
     {
         icon:'User',
         index:'/studentInfo',
         title:'学生管理',
         permiss:'15',
     },
+
     {
         icon:'Avatar',
         index:'/teacherInfo',
         title:'教师管理',
         permiss:'15',
     },
+
     {
         icon:'Message',
         index:'/messageList',
         title:'消息列表',
         permiss:'15',
     },
+
     {
         icon:'User',
         index:'/studentHome',
         title:'学员主页',
         permiss:'10',
     },
+
     {
         icon:'DataBoard',
         index:'/studentApplication',
         title:'学员选课',
         permiss:'15',
     },
+
     {
         icon:'Message',
         index:'/studentMessage',
         title:'学员消息',
+        permiss:'15',
+    },
+
+    {
+        icon:'Message',
+        index:'/managerMessage',
+        title:'经理消息',
         permiss:'15',
     },
 ];
