@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue';
+import { ref, reactive, getCurrentInstance } from 'vue';
 import { useTagsStore } from '../store/tags';
 import { usePermissStore } from '../store/permiss';
 import { useRouter } from 'vue-router';
@@ -63,18 +63,34 @@ const rules: FormRules = {
 };
 const permiss = usePermissStore();
 const login = ref<FormInstance>();
+const instance = getCurrentInstance();
 const submitForm = (formEl: FormInstance | undefined) => {
 	if (!formEl) return;
 	formEl.validate((valid: boolean) => {
 		if (valid) {
-			ElMessage.success('登录成功');
-			localStorage.setItem('ms_username', param.username);
-			const keys = permiss.defaultList[param.username == 'admin' ? 'admin' : 'user'];
-			permiss.handleSet(keys);
-			localStorage.setItem('ms_keys', JSON.stringify(keys));
-			router.push('/');
+			instance?.appContext.config.globalProperties.$http.post("/student/login",param)
+			.then((res:any)=>{
+				if(res.data.status===0){
+					ElMessage.success('登录成功');
+					localStorage.setItem('ms_username', param.username);
+					const keys = permiss.defaultList[param.username == 'admin' ? 'admin' : 'user'];
+					permiss.handleSet(keys);
+					localStorage.setItem('ms_keys', JSON.stringify(keys));
+					router.push('/');
+					return true;
+				}
+				else{
+					ElMessage.error(res.data.msg);
+					return false;
+				}
+			})
+			.catch(()=>{
+				ElMessage.error("服务器访问异常");
+				return false;
+			})
+			
 		} else {
-			ElMessage.error('登录成功');
+			ElMessage.error('登录失败');
 			return false;
 		}
 	});
