@@ -219,6 +219,13 @@ const items = [
         title:'课程设置',
         permiss:'15',
     },
+
+    {
+        icon:'Connection',
+        index:'/companyApplication',
+        title:'培训需求',
+        permiss:'15',
+    },
 ];
 
 const route = useRoute();
