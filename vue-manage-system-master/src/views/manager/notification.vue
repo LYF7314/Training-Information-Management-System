@@ -45,7 +45,7 @@
                 </el-form-item>
                 
                 <el-form-item label="教师职称" prop="region">
-                    <el-select v-model="form.region" placeholder="请选择">
+                    <el-select v-model="form.professionalTitles" placeholder="请选择">
                         <el-option key="Assistant" label="Assistant" value="Assistant"></el-option>
                         <el-option key="Lecturer" label="Lecturer" value="Lecturer"></el-option>
                         <el-option key="Reader" label="Reader" value="Reader"></el-option>
@@ -55,12 +55,12 @@
 
                 
                 <el-form-item label="电子邮箱">
-                    <el-input v-model="form.specialization"></el-input>
+                    <el-input v-model="form.email"></el-input>
                 </el-form-item>
 
                 
                 <el-form-item label="手机号码">
-                    <el-input v-model="form.specialization"></el-input>
+                    <el-input v-model="form.phone"></el-input>
                 </el-form-item>
 
                 <el-form-item>
