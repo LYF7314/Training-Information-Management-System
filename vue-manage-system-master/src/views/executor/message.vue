@@ -1,41 +1,38 @@
 <template>
 	<div class="container">
 		<el-tabs v-model="message">
-			<el-tab-pane :label="`未读消息(${state.unread.length})`" name="first">
-				<el-table :data="state.unread" :show-header="false" style="width: 100%">
+			<el-tab-pane :label="`未读消息(${unreadMessages.length})`" name="first">
+				<el-table :data="unreadMessages" :show-header="false" style="width: 100%">
 					<el-table-column>
 						<template #default="scope">
-							<span class="message-title">{{ scope.row.title }}</span>
+							<span @click="readDetail(scope.row.messageId)" class="message-title">{{ scope.row.title }}</span>
 						</template>
 					</el-table-column>
-					<el-table-column prop="date" width="180"></el-table-column>
-					<el-table-column width="120">
+					<el-table-column prop="sendTime" width="180"></el-table-column>
+					<el-table-column width="200">
 						<template #default="scope">
-                            <el-row>
-                                    <el-button size="small" @click="handleRead(scope.$index)">标为已读</el-button>
-                            </el-row>
+							<el-button size="small" type="primary" @click="">同意</el-button>
+							<el-button size="small" @click="handleRead(scope.$index)">标为已读</el-button>
 						</template>
 					</el-table-column>
-                    <el-table-column width="120">
-                        <el-button size="small" type="primary" @click="">同意</el-button>
-                    </el-table-column>
 				</el-table>
 				<div class="handle-row">
 					<el-button type="primary">全部标为已读</el-button>
 				</div>
 			</el-tab-pane>
-			<el-tab-pane :label="`已读消息(${state.read.length})`" name="second">
+			<el-tab-pane :label="`已读消息(${readMessages.length})`" name="second">
 				<template v-if="message === 'second'">
-					<el-table :data="state.read" :show-header="false" style="width: 100%">
+					<el-table :data="readMessages" :show-header="false" style="width: 100%">
 						<el-table-column>
 							<template #default="scope">
-								<span class="message-title">{{ scope.row.title }}</span>
+								<span @click="readDetail(scope.row.messageId)" class="message-title">{{ scope.row.title }}</span>
 							</template>
 						</el-table-column>
-						<el-table-column prop="date" width="160"></el-table-column>
-						<el-table-column width="100">
+						<el-table-column prop="sendTime" width="160"></el-table-column>
+						<el-table-column width="150">
 							<template #default="scope">
-								<el-button type="danger" @click="handleDel(scope.$index)">删除</el-button>
+								<el-button size="small" type="primary" @click="handleDel(scope.$index)">同意</el-button>
+								<el-button size="small" type="danger" @click="handleDel(scope.$index)">删除</el-button>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -44,6 +41,16 @@
 					</div>
 				</template>
 			</el-tab-pane>
+			<el-dialog title="消息详细" v-model="isDeatilShow" width="30%">
+				<h2>{{ curMsg.title }}</h2>
+				<p id="contentDetail">&nbsp;&nbsp;{{ curMsg.content }}</p>
+				<!-- <template #footer>
+					<span class="dialog-footer">
+					<el-button @click="editVisible = false">取 消</el-button>
+					<el-button type="primary" @click="saveEdit">确 定</el-button>
+					</span>
+				</template> -->
+			</el-dialog>
 			<!-- <el-tab-pane :label="`回收站(${state.recycle.length})`" name="third">
 				<template v-if="message === 'third'">
 					<el-table :data="state.recycle" :show-header="false" style="width: 100%">
@@ -69,7 +76,8 @@
 </template>
 
 <script setup lang="ts" name="tabs">
-import { ref, reactive } from 'vue';
+import { ElMessage } from 'element-plus';
+import { ref, reactive,getCurrentInstance } from 'vue';
 
 const message = ref('first');
 const state = reactive({
@@ -97,6 +105,52 @@ const state = reactive({
 	]
 });
 
+const messages = ref<any[]>([]);
+const readMessages = ref<any[]>([]);
+const unreadMessages = ref<any[]>([]);
+
+const instance = getCurrentInstance();
+
+const getMessage = ()=>{
+	instance?.appContext.config.globalProperties.$http.get('/messageList')
+	.then((res: any) => {
+		if(res.data.status ===0){
+			// 分拣消息
+			messages.value = res.data.data;
+			divideMessages();
+		}
+		else{
+			ElMessage.error(res.data.msg);
+		}
+	})
+	.catch(() => {
+		ElMessage.error('服务器访问异常');
+	});
+}
+getMessage();
+
+const divideMessages = ()=>{
+	unreadMessages.value = [];
+	readMessages.value = [];
+	messages.value.forEach((item: any) => {
+		if(item.read){
+			readMessages.value.push(item);
+		}
+		else{
+			unreadMessages.value.push(item);
+		}
+	});
+}
+
+const isDeatilShow = ref(false);
+const curMsgId = ref(-1)
+const curMsg = ref<any>({})
+const readDetail=(msgId:number)=>{
+	isDeatilShow.value = true;
+	curMsgId.value = msgId;
+	curMsg.value = messages.value.find((item:any)=>item.messageId === msgId);
+}
+
 const handleRead = (index: number) => {
 	const item = state.unread.splice(index, 1);
 	state.read = item.concat(state.read);
@@ -116,6 +170,9 @@ const handleRestore = (index: number) => {
 	cursor: pointer;
 }
 .handle-row {
+	margin-top: 30px;
+}
+#contentDetail{
 	margin-top: 30px;
 }
 </style>
