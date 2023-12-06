@@ -23,7 +23,8 @@
         <!-- <el-button type="primary" :icon="Plus">新增</el-button> -->
         <el-button text @click="beginAdd">新增</el-button>
       </div>
-      <el-dialog v-model="dialogFormVisible" title="Shipping address">
+
+      <el-dialog v-model="dialogFormVisible" title="新增课程">
         <el-form :model="form">
           <el-form-item label="讲师" :label-width="formLabelWidth">
             <el-select v-model="newCourse.teacherId">
@@ -75,6 +76,7 @@
           </span>
         </template>
       </el-dialog>
+
       <el-table
         :data="filteredData"
         border
@@ -236,10 +238,12 @@ const getTeachers = ()=>{
     ElMessage.error('服务器访问异常');
   })
 }
+
 const beginAdd = ()=>{
   dialogFormVisible.value = true
   getTeachers()
 }
+
 const addCourse=()=>{
   instance?.appContext.config.globalProperties.$http.post("/admin/course/add",newCourse)
   .then((res:any)=>{
@@ -256,8 +260,10 @@ const addCourse=()=>{
     ElMessage.error('服务器访问异常');
   })
 }
+
 // 过滤查询
 const filteredData = ref<TableItem[]>([]);
+
 // 查询操作
 const handleSearch = () => {
   // query.pageIndex = 1;

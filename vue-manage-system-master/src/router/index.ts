@@ -173,6 +173,24 @@ const routes: RouteRecordRaw[] = [
                 },
                 component: () => import(/* webpackChunkName: "import" */ '../views/executor/message.vue'),
             },
+            {
+                path: '/studentHome',
+                name: 'studentHome',
+                meta: {
+                    title: '学员主页',
+                    permiss: '15',
+                },
+                component: () => import(/* webpackChunkName: "import" */ '../views/student/home.vue'),
+            },
+            {
+                path: '/studentApplication',
+                name: 'studentApplication',
+                meta: {
+                    title: '学员选课',
+                    permiss: '15',
+                },
+                component: () => import(/* webpackChunkName: "import" */ '../views/student/application.vue'),
+            },
         ],
     },
     {

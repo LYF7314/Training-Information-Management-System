@@ -100,9 +100,25 @@ const data: Tree[] = [
 		label: '权限管理'
 	},
 	{
-		id: '14',
+		id: '12',
 		label: '支持作者'
-	}
+	},
+	{
+		id: '12',
+		label: '课程管理'
+	},
+	{
+		id: '12',
+		label: '学生管理'
+	},
+	{
+		id: '12',
+		label: '教师管理'
+	},
+	{
+		id: '12',
+		label: '消息列表'
+	},
 ];
 
 const permiss = usePermissStore();

@@ -174,6 +174,18 @@ const items = [
         title:'消息列表',
         permiss:'15',
     },
+    {
+        icon:'User',
+        index:'/studentHome',
+        title:'学员主页',
+        permiss:'10',
+    },
+    {
+        icon:'DataBoard',
+        index:'/studentApplication',
+        title:'学员选课',
+        permiss:'15',
+    },
 ];
 
 const route = useRoute();
