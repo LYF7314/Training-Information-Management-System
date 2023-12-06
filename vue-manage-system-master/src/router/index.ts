@@ -209,6 +209,15 @@ const routes: RouteRecordRaw[] = [
                 },
                 component: () => import(/* webpackChunkName: "import" */ '../views/manager/message.vue'),
             },
+            {
+                path: '/managerNotification',
+                name: 'managerNotification',
+                meta: {
+                    title: '课程设置',
+                    permiss: '15',
+                },
+                component: () => import(/* webpackChunkName: "import" */ '../views/manager/notification.vue'),
+            },
         ],
     },
     {

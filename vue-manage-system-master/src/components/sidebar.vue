@@ -212,6 +212,13 @@ const items = [
         title:'经理消息',
         permiss:'15',
     },
+
+    {
+        icon:'DocumentAdd',
+        index:'/managerNotification',
+        title:'课程设置',
+        permiss:'15',
+    },
 ];
 
 const route = useRoute();
