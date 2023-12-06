@@ -44,10 +44,11 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { onMounted } from 'vue';
+import { onMounted,getCurrentInstance } from 'vue';
 import { useSidebarStore } from '../store/sidebar';
 import { useRouter } from 'vue-router';
 import imgurl from '../assets/img/img.jpg';
+import { ElMessage } from 'element-plus';
 
 const username: string | null = localStorage.getItem('ms_username');
 const message: number = 2;
@@ -66,10 +67,23 @@ onMounted(() => {
 
 // 用户名下拉菜单选择事件
 const router = useRouter();
+const instance = getCurrentInstance();
 const handleCommand = (command: string) => {
 	if (command == 'loginout') {
-		localStorage.removeItem('ms_username');
-		router.push('/login');
+		instance?.appContext.config.globalProperties.$http.get("/student/logout")
+		.then((res:any)=>{
+			if(res.data.status===0){
+				ElMessage.success("退出成功")
+				localStorage.removeItem('ms_username');
+				router.push('/login');
+			}
+			else{
+				ElMessage.error(res.data.msg)
+			}
+		})
+		.catch(()=>{
+			ElMessage.error("服务器访问异常")
+		})
 	} else if (command == 'user') {
 		router.push('/user');
 	}

@@ -48,7 +48,7 @@ interface LoginInfo {
 const router = useRouter();
 const param = reactive<LoginInfo>({
 	username: 'admin',
-	password: '123123'
+	password: 'admin'
 });
 
 const rules: FormRules = {
@@ -76,7 +76,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
 					const keys = permiss.defaultList[param.username == 'admin' ? 'admin' : 'user'];
 					permiss.handleSet(keys);
 					localStorage.setItem('ms_keys', JSON.stringify(keys));
-					router.push('/');
+					router.push('/dashboard');
 					return true;
 				}
 				else{

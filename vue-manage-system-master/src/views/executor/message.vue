@@ -11,13 +11,13 @@
 					<el-table-column prop="sendTime" width="180"></el-table-column>
 					<el-table-column width="200">
 						<template #default="scope">
-							<el-button size="small" type="primary" @click="">同意</el-button>
-							<el-button size="small" @click="handleRead(scope.$index)">标为已读</el-button>
+							<el-button :style="acceptButtonStyle(scope.row.accepted)" size="small" type="primary" @click="handleAccept(scope.row.messageId)">同意</el-button>
+							<el-button size="small" @click="handleRead(scope.row.messageId)">标为已读</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
 				<div class="handle-row">
-					<el-button type="primary">全部标为已读</el-button>
+					<el-button type="primary" @click="allRead">全部标为已读</el-button>
 				</div>
 			</el-tab-pane>
 			<el-tab-pane :label="`已读消息(${readMessages.length})`" name="second">
@@ -31,8 +31,8 @@
 						<el-table-column prop="sendTime" width="160"></el-table-column>
 						<el-table-column width="150">
 							<template #default="scope">
-								<el-button size="small" type="primary" @click="handleDel(scope.$index)">同意</el-button>
-								<el-button size="small" type="danger" @click="handleDel(scope.$index)">删除</el-button>
+								<el-button :style="acceptButtonStyle(scope.row.accepted)" size="small" type="primary" @click="handleAccept(scope.row.messageId)">同意</el-button>
+								<el-button size="small" type="danger" @click="handleDel(scope.row.messageId)">删除</el-button>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -77,7 +77,7 @@
 
 <script setup lang="ts" name="tabs">
 import { ElMessage } from 'element-plus';
-import { ref, reactive,getCurrentInstance } from 'vue';
+import { ref, reactive,getCurrentInstance, computed } from 'vue';
 
 const message = ref('first');
 const state = reactive({
@@ -133,7 +133,7 @@ const divideMessages = ()=>{
 	unreadMessages.value = [];
 	readMessages.value = [];
 	messages.value.forEach((item: any) => {
-		if(item.read){
+		if(item.isRead){
 			readMessages.value.push(item);
 		}
 		else{
@@ -151,13 +151,80 @@ const readDetail=(msgId:number)=>{
 	curMsg.value = messages.value.find((item:any)=>item.messageId === msgId);
 }
 
-const handleRead = (index: number) => {
-	const item = state.unread.splice(index, 1);
-	state.read = item.concat(state.read);
+const nums = ref<any>([]);
+
+const allRead = ()=>{
+	unreadMessages.value.forEach((item:any)=>{
+		nums.value.push(item.messageId);
+	})
+	instance?.appContext.config.globalProperties.$http.post('/readList',{nums:nums.value})
+	.then((res: any) => {
+		if(res.data.status ===0){
+			// 分拣消息
+			unreadMessages.value.forEach((item:any)=>{
+				item.isRead = true;
+			});
+			divideMessages();
+		}
+		else{
+			ElMessage.error(res.data.msg);
+		}
+	})
+	.catch(() => {
+		ElMessage.error('服务器访问异常');
+	});
+}
+
+const acceptButtonStyle = (isAccepted:boolean)=>{
+	return {
+		'visibility': isAccepted?'hidden':'visible',
+	}
+}
+
+const handleRead = (msgId: number) => {
+	instance?.appContext.config.globalProperties.$http.get(`/read?messageId=${msgId}`)
+	.then((res:any)=>{
+		if(res.data.status===0){
+			messages.value.find((item:any)=>item.messageId === msgId).isRead = true;
+			divideMessages();
+		}
+		else{
+			ElMessage.error(res.data.msg);
+		}
+	})
+	.catch(()=>{
+		ElMessage.error('服务器访问异常');
+	});
 };
-const handleDel = (index: number) => {
-	const item = state.read.splice(index, 1);
-	state.recycle = item.concat(state.recycle);
+const handleAccept = (msgId: number)=>{
+	const curMsg = messages.value.find((item:any)=>item.messageId === msgId);
+	instance?.appContext.config.globalProperties.$http.get(`/admin/course/agree?studentId=${curMsg.senderId}&courseId=${curMsg.courseId}`)
+	.then((res:any)=>{
+		if(res.data.status===0){
+			curMsg.accepted = true;
+		}
+		else{
+			ElMessage.error(res.data.msg);
+		}
+	})
+	.catch(()=>{
+		ElMessage.error('服务器访问异常');
+	});
+}
+const handleDel = (messageId: number) => {
+	instance?.appContext.config.globalProperties.$http.post(`/message/delete`,{messageId})
+	.then((res:any)=>{
+		if(res.data.status===0){
+			messages.value = messages.value.filter((item:any)=>item.messageId !== messageId);
+			divideMessages();
+		}
+		else{
+			ElMessage.error(res.data.msg);
+		}
+	})
+	.catch(()=>{
+		ElMessage.error('服务器访问异常');
+	});
 };
 const handleRestore = (index: number) => {
 	const item = state.recycle.splice(index, 1);
