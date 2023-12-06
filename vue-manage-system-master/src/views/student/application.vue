@@ -11,60 +11,6 @@
             >搜索</el-button
           >
         </div>
-  
-        <el-dialog v-model="dialogFormVisible" title="新增课程">
-          <el-form :model="form">
-            <el-form-item label="讲师" :label-width="formLabelWidth">
-              <el-select v-model="newCourse.teacherId">
-                <el-option
-                  v-for="item in teachers"
-                  :key="item.teacherId"
-                  :label="item.teacherName"
-                  :value="item.teacherId"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="课程名" :label-width="formLabelWidth">
-              <el-input v-model="newCourse.courseTitle"/>
-            </el-form-item>
-            <el-form-item label="时间" :label-width="formLabelWidth">
-              开始时间：
-              <el-date-picker
-                v-model="newCourse.startTime"
-                type="datetime"
-                placeholder="请选择开始时间"
-                format="YYYY-MM-DD HH:mm:ss"
-                value-format="YYYY-MM-DD HH:mm:ss"
-              />
-              <span>&nbsp;&nbsp;</span>结束时间： 
-              <el-date-picker
-                v-model="newCourse.endTime"
-                type="datetime"
-                placeholder="请选择结束时间"
-                format="YYYY-MM-DD HH:mm:ss"
-                value-format="YYYY-MM-DD HH:mm:ss"
-              />
-            </el-form-item>
-            <el-form-item :label-width="formLabelWidth" label="地点">
-              <el-input v-model="newCourse.location"/>
-            </el-form-item>
-            <el-form-item :label-width="formLabelWidth" label="公司">
-              <el-input v-model="newCourse.company" />
-            </el-form-item>
-            <el-form-item :label-width="formLabelWidth" label="费用">
-              <el-input v-model.number="newCourse.cost" />
-            </el-form-item>
-          </el-form>
-          <template #footer>
-            <span class="dialog-footer">
-              <el-button @click="dialogFormVisible = false">取消</el-button>
-              <el-button type="primary" @click="addCourse">
-                新增
-              </el-button>
-            </span>
-          </template>
-        </el-dialog>
-  
         <el-table
           :data="filteredData"
           border
@@ -93,21 +39,11 @@
               <el-button
                 text
                 icon="Check"
-                @click="handleEdit(scope.row.courseId, scope.row)"
+                @click="applyCourse(scope.row.courseId, scope.row)"
                 v-permiss="15"
               >
                 申请
               </el-button>
-
-              <!-- <el-button
-                text
-                :icon="Delete"
-                class="red"
-                @click="handleDelete(scope.row.courseId)"
-                v-permiss="16"
-              >
-                删除
-              </el-button> -->
             </template>
           </el-table-column>
         </el-table>
@@ -233,13 +169,12 @@
     getTeachers()
   }
   
-  const addCourse=()=>{
-    instance?.appContext.config.globalProperties.$http.post("/admin/course/add",newCourse)
+  const applyCourse=(courseId: number, row: any)=>{
+    instance?.appContext.config.globalProperties.$http.post("/student/apply",courseId)
     .then((res:any)=>{
       if(res.data.status===0){
-        ElMessage.success("添加成功")
+        ElMessage.success("发送申请成功")
         dialogFormVisible.value = false
-        getData()
       }
       else{
         ElMessage.error(res.data.msg);

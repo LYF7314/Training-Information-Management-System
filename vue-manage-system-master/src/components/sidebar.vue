@@ -186,6 +186,12 @@ const items = [
         title:'学员选课',
         permiss:'15',
     },
+    {
+        icon:'Message',
+        index:'/studentMessage',
+        title:'学员消息',
+        permiss:'15',
+    },
 ];
 
 const route = useRoute();
