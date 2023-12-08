@@ -3,7 +3,7 @@
       <div class="container">
         <div class="handle-box">
           <el-input
-            v-model="query.name"
+            v-model="query.detail"
             placeholder="学生姓名"
             class="handle-input mr10"
           ></el-input>
@@ -46,7 +46,7 @@
             </el-select>
           </el-form-item>
           <el-form-item :label-width="formLabelWidth" label="邮箱">
-            <el-input v-model.number="newStudent.email" />
+            <el-input v-model="newStudent.email" />
           </el-form-item>
         </el-form>
         <template #footer>
@@ -72,12 +72,12 @@
             width="55"
             align="center"
           ></el-table-column>
-          <el-table-column prop="lesson" label="姓名"></el-table-column>
-          <el-table-column prop="name" label="性别"></el-table-column>
-          <el-table-column label="隶属公司"></el-table-column>
-          <el-table-column prop="" label="职位"></el-table-column>
-          <el-table-column prop="" label="业务水平"></el-table-column>
-          <el-table-column prop="" label="邮箱地址"></el-table-column>
+          <el-table-column prop="studentName" label="姓名"></el-table-column>
+          <el-table-column prop="gender" label="性别"></el-table-column>
+          <el-table-column prop="company" label="隶属公司"></el-table-column>
+          <el-table-column prop="position" label="职位"></el-table-column>
+          <el-table-column prop="level" label="业务水平"></el-table-column>
+          <el-table-column prop="email" label="邮箱地址"></el-table-column>
           <el-table-column label="操作" width="220">
             <template #default="scope">
               <el-button
@@ -92,7 +92,7 @@
                 text
                 :icon="Delete"
                 class="red"
-                @click="handleDelete(scope.row.courseId)"
+                @click="handleDelete(scope.row.studentId)"
                 v-permiss="16"
               >
                 删除
@@ -115,12 +115,32 @@
     <!-- 编辑弹出框 -->
     <el-dialog title="编辑" v-model="editVisible" width="30%">
       <el-form label-width="70px">
-        <el-form-item label="职位">
+        <!-- <el-form-item label="职位">
           <el-input v-model.number="form.position"></el-input>
         </el-form-item>
         <el-form-item label="水平">
           <el-input v-model="form.level"></el-input>
-        </el-form-item>
+        </el-form-item> -->
+        <el-form-item label="职位">
+            <el-select v-model="form.position" placeholder="请选择学员职位">
+              <el-option label="Product" value="Product" />
+              <el-option label="Frontend" value="Frontend" />
+              <el-option label="Backend" value="Backend" />
+              <el-option label="FullStack" value="FullStack" />
+              <el-option label="Architect" value="Architect" />
+              <el-option label="Planner" value="Planner" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="水平">
+            <el-select v-model="form.level" placeholder="请选择学员水平">
+              <el-option label="Junior" value="Junior" />
+              <el-option label="Intermediate" value="Intermediate" />
+              <el-option label="Senior" value="Senior" />
+              <el-option label="Lead" value="Lead" />
+              <el-option label="Architect" value="Architect" />
+              <el-option label="Principal" value="Principal" />
+            </el-select>
+          </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
@@ -162,7 +182,6 @@
   const query = reactive({
     type: 1,
     detail: "",
-    name:"",
     pageIndex: 1,
     pageSize: 10,
   });
@@ -199,6 +218,21 @@
 
   const students:any = ref([]);
 
+  const getStudents = ()=>{
+  instance?.appContext.config.globalProperties.$http.get("/admin/student/list")
+  .then((res:any)=>{
+    if(res.data.status===0){
+      students.value = res.data.data
+    }
+    else{
+      ElMessage.error(res.data.msg);
+    }
+  })
+  .catch(()=>{
+    ElMessage.error('服务器访问异常');
+  })
+}
+
   const addStudent=()=>{
   instance?.appContext.config.globalProperties.$http.post("/admin/student/add",newStudent)
   .then((res:any)=>{
@@ -234,20 +268,20 @@ const filteredData = ref<TableItem[]>([]);
         return item.studentName.indexOf(query.detail)!=-1
       })
       break;
-    // case 2:
-    //   filteredData.value = tableData.value.filter((item)=>{
-    //     if(!item.courseTitle)
-    //       return false
-    //     return item.courseTitle.indexOf(query.detail)!=-1
-    //   })
-    //   break;
-    // case 3:
-    //   filteredData.value = tableData.value.filter((item)=>{
-    //     if(!item.company)
-    //       return false
-    //     return item.company.indexOf(query.detail)!=-1
-    //   })
-    //   break;
+    case 2:
+      filteredData.value = tableData.value.filter((item)=>{
+        if(!item.gender)
+          return false
+        return item.gender.indexOf(query.detail)!=-1
+      })
+      break;
+    case 3:
+      filteredData.value = tableData.value.filter((item)=>{
+        if(!item.company)
+          return false
+        return item.company.indexOf(query.detail)!=-1
+      })
+      break;
   }
 };
 
@@ -287,6 +321,7 @@ const filteredData = ref<TableItem[]>([]);
   let form = reactive({
     position: "",
     level: "",
+    email: "",
   });
   let idx: number = -1;
   const handleEdit = (id: number, row: any) => {
@@ -300,6 +335,7 @@ const filteredData = ref<TableItem[]>([]);
       if(item.studentId == idx){
           tableData.value[index].position = form.position;
           tableData.value[index].level = form.level;
+          tableData.value[index].email = form.email;
           instance?.appContext.config.globalProperties.$http.post("/admin/student/update",tableData.value[index])
           .then((res:any)=>{
             if(res.data.status===0){

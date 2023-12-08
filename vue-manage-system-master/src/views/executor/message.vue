@@ -44,33 +44,7 @@
 			<el-dialog title="消息详细" v-model="isDeatilShow" width="30%">
 				<h2>{{ curMsg.title }}</h2>
 				<p id="contentDetail">&nbsp;&nbsp;{{ curMsg.content }}</p>
-				<!-- <template #footer>
-					<span class="dialog-footer">
-					<el-button @click="editVisible = false">取 消</el-button>
-					<el-button type="primary" @click="saveEdit">确 定</el-button>
-					</span>
-				</template> -->
 			</el-dialog>
-			<!-- <el-tab-pane :label="`回收站(${state.recycle.length})`" name="third">
-				<template v-if="message === 'third'">
-					<el-table :data="state.recycle" :show-header="false" style="width: 100%">
-						<el-table-column>
-							<template #default="scope">
-								<span class="message-title">{{ scope.row.title }}</span>
-							</template>
-						</el-table-column>
-						<el-table-column prop="date" width="150"></el-table-column>
-						<el-table-column width="120">
-							<template #default="scope">
-								<el-button @click="handleRestore(scope.$index)">还原</el-button>
-							</template>
-						</el-table-column>
-					</el-table>
-					<div class="handle-row">
-						<el-button type="danger">清空回收站</el-button>
-					</div>
-				</template>
-			</el-tab-pane> -->
 		</el-tabs>
 	</div>
 </template>
