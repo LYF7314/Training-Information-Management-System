@@ -24,7 +24,7 @@
 
   </el-card>
 
-  <el-dialog v-model="dialogFormVisible" title="新增学员">
+  <el-dialog @closed="handleClose" v-model="dialogFormVisible" title="新增学员">
 
     <el-form :model="form">
       <el-form-item label="名称">
@@ -33,8 +33,8 @@
 
       <el-form-item label="性别">
         <el-select v-model="newStudent.gender" placeholder="请选择学员性别">
-          <el-option label="男" value="male" />
-          <el-option label="女" value="female" />
+          <el-option label="男" value="男" />
+          <el-option label="女" value="女" />
         </el-select>
       </el-form-item>
 
@@ -149,6 +149,15 @@ const getData = () => {
   });
 };
 getData();
+
+const handleClose = () => {
+  newStudent.studentName= ""
+  newStudent.gender= ""
+  newStudent.company= ""
+  newStudent.position= ""
+  newStudent.level= ""
+  newStudent.email=""
+}
 
 const addStudentInfo=()=>{
   instance?.appContext.config.globalProperties.$http.post("/student/info",newStudent)
