@@ -169,14 +169,14 @@ const routes: RouteRecordRaw[] = [
                 name: 'messageList',
                 meta: {
                     title: '消息列表',
-                    permiss: '15',
+                    permiss: '16',
                 },
                 component: () => import(/* webpackChunkName: "import" */ '../views/executor/message.vue'),
             },
             {
                 path: '/studentHome',
                 name: 'studentHome',
-                meta: {
+                meta: { 
                     title: '学员主页',
                     permiss: '15',
                 },
