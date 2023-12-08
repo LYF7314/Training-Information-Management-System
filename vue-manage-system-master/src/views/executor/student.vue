@@ -3,7 +3,7 @@
       <div class="container">
         <div class="handle-box">
           <el-input
-            v-model="query.name"
+            v-model="query.detail"
             placeholder="学生姓名"
             class="handle-input mr10"
           ></el-input>
@@ -162,7 +162,6 @@
   const query = reactive({
     type: 1,
     detail: "",
-    name:"",
     pageIndex: 1,
     pageSize: 10,
   });
@@ -234,20 +233,20 @@ const filteredData = ref<TableItem[]>([]);
         return item.studentName.indexOf(query.detail)!=-1
       })
       break;
-    // case 2:
-    //   filteredData.value = tableData.value.filter((item)=>{
-    //     if(!item.courseTitle)
-    //       return false
-    //     return item.courseTitle.indexOf(query.detail)!=-1
-    //   })
-    //   break;
-    // case 3:
-    //   filteredData.value = tableData.value.filter((item)=>{
-    //     if(!item.company)
-    //       return false
-    //     return item.company.indexOf(query.detail)!=-1
-    //   })
-    //   break;
+    case 2:
+      filteredData.value = tableData.value.filter((item)=>{
+        if(!item.gender)
+          return false
+        return item.gender.indexOf(query.detail)!=-1
+      })
+      break;
+    case 3:
+      filteredData.value = tableData.value.filter((item)=>{
+        if(!item.company)
+          return false
+        return item.company.indexOf(query.detail)!=-1
+      })
+      break;
   }
 };
 
