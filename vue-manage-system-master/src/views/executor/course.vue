@@ -100,8 +100,24 @@
           </template>
         </el-table-column>
 		    <el-table-column prop="location" label="地点"></el-table-column>
-        <el-table-column label="操作" width="220" align="center">
+        <el-table-column label="操作" width="440" align="center">
           <template #default="scope">
+            <el-button
+              text
+              :icon="Edit"
+              @click="handleInfo(scope.row.courseId)"
+              v-permiss="15"
+            >
+              通知
+            </el-button>
+            <el-button
+              text
+              :icon="Edit"
+              @click="handleComment(scope.row.courseId)"
+              v-permiss="15"
+            >
+              评教
+            </el-button>
             <el-button
               text
               :icon="Edit"
@@ -361,8 +377,35 @@ const saveEdit = () => {
         })
       }
   })
-  
 };
+const handleInfo = (courseId:any)=>{
+  instance?.appContext.config.globalProperties.$http.get("/admin/course/notice?courseId="+courseId)
+  .then((res:any)=>{
+    if(res.data.status===0){
+      ElMessage.success("发送成功");
+    }
+    else{
+      ElMessage.error(res.data.msg);
+    }
+  })
+  .catch(()=>{
+    ElMessage.error('服务器访问异常');
+  })
+}
+const handleComment = (courseId:any)=>{
+  instance?.appContext.config.globalProperties.$http.get("/admin/course/comment?courseId="+courseId)
+  .then((res:any)=>{
+    if(res.data.status===0){
+      ElMessage.success("发送成功");
+    }
+    else{
+      ElMessage.error(res.data.msg);
+    }
+  })
+  .catch(()=>{
+    ElMessage.error('服务器访问异常');
+  })
+}
 </script>
 
 <style scoped>

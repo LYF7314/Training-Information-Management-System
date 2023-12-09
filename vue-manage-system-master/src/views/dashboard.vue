@@ -42,8 +42,8 @@
 							<div class="grid-content grid-con-1">
 								<el-icon class="grid-con-icon"><User /></el-icon>
 								<div class="grid-cont-right">
-									<div class="grid-num">1234</div>
-									<div>用户访问量</div>
+									<div class="grid-num">{{ tab1.courseNumber }}</div>
+									<div>经办课程数</div>
 								</div>
 							</div>
 						</el-card>
@@ -53,8 +53,8 @@
 							<div class="grid-content grid-con-2">
 								<el-icon class="grid-con-icon"><ChatDotRound /></el-icon>
 								<div class="grid-cont-right">
-									<div class="grid-num">321</div>
-									<div>系统消息</div>
+									<div class="grid-num">{{ tab1.totalIncome }}</div>
+									<div>总收入</div>
 								</div>
 							</div>
 						</el-card>
@@ -64,8 +64,8 @@
 							<div class="grid-content grid-con-3">
 								<el-icon class="grid-con-icon"><Goods /></el-icon>
 								<div class="grid-cont-right">
-									<div class="grid-num">5000</div>
-									<div>商品数量</div>
+									<div class="grid-num">{{ tab1.studentConversionRate }}</div>
+									<div>学生转化率</div>
 								</div>
 							</div>
 						</el-card>
@@ -107,9 +107,14 @@
 					<schart ref="bar" class="schart" canvasId="bar" :options="options"></schart>
 				</el-card>
 			</el-col>
-			<el-col :span="12">
+			<el-col :span="6">
 				<el-card shadow="hover">
-					<schart ref="line" class="schart" canvasId="line" :options="options2"></schart>
+					<schart ref="pie1" class="schart" canvasId="pie1" :options="options2"></schart>
+				</el-card>
+			</el-col>
+			<el-col :span="6">
+				<el-card shadow="hover">
+					<schart ref="pie2" class="schart" canvasId="pie2" :options="options3"></schart>
 				</el-card>
 			</el-col>
 		</el-row>
@@ -118,55 +123,38 @@
 
 <script setup lang="ts" name="dashboard">
 import Schart from 'vue-schart';
-import { reactive } from 'vue';
+import { reactive,ref,getCurrentInstance } from 'vue';
 import imgurl from '../assets/img/img.jpg';
+import { ElMessage } from 'element-plus';
 
 const name = localStorage.getItem('ms_username');
 const role: string = name === 'admin' ? '超级管理员' : '普通用户';
 
-const options = {
+const options = reactive<any>({
 	type: 'bar',
 	title: {
-		text: '最近一周各品类销售图'
+		text: '课程情况图'
 	},
 	xRorate: 25,
-	labels: ['周一', '周二', '周三', '周四', '周五'],
-	datasets: [
-		{
-			label: '家电',
-			data: [234, 278, 270, 190, 230]
-		},
-		{
-			label: '百货',
-			data: [164, 178, 190, 135, 160]
-		},
-		{
-			label: '食品',
-			data: [144, 198, 150, 235, 120]
-		}
-	]
-};
-const options2 = {
-	type: 'line',
+	labels: [],
+	datasets: []
+});
+const options2 = reactive<any>({
+	type: 'pie',
 	title: {
-		text: '最近几个月各品类销售趋势图'
+		text: '学生占比图'
 	},
-	labels: ['6月', '7月', '8月', '9月', '10月'],
-	datasets: [
-		{
-			label: '家电',
-			data: [234, 278, 270, 190, 230]
-		},
-		{
-			label: '百货',
-			data: [164, 178, 150, 135, 160]
-		},
-		{
-			label: '食品',
-			data: [74, 118, 200, 235, 90]
-		}
-	]
-};
+	labels: [],
+	datasets: []
+});
+const options3 = reactive<any>({
+	type: 'pie',
+	title: {
+		text: '讲师占比图'
+	},
+	labels: [],
+	datasets: []
+});
 const todoList = reactive([
 	{
 		title: '今天要修复100个bug',
@@ -193,6 +181,63 @@ const todoList = reactive([
 		status: true
 	}
 ]);
+const tab1 = ref<any>({});
+const tab2 = ref<any>([]);
+const tab3 = ref<any>([]);
+const tab4 = ref<any>([]);
+const instantce = getCurrentInstance()
+const getData = () => {
+	instantce?.appContext.config.globalProperties.$http.get('/report/admin').then((res: any) => {
+		if(res.data.status==0){
+			tab1.value = res.data.data;
+		}
+		else{
+			ElMessage.error(res.data.msg);
+		}
+	}).catch(() => {
+		ElMessage.error("服务器访问错误");
+	});
+	instantce?.appContext.config.globalProperties.$http.get('/report/course/barchart').then((res: any) => {
+		if(res.data.status==0){
+			tab2.value = res.data.data;
+			tab2.value.splice(5)
+			options.labels = tab2.value.map((item: any) => item.courseTitle)
+			options.datasets = [];
+			options.datasets.push({label:"学生数",data:tab2.value.map((item: any) => item.studentNumber)});
+			options.datasets.push({label:"课程收入",data:tab2.value.map((item: any) => item. income)});
+		}
+		else{
+			ElMessage.error(res.data.msg);
+		}
+	}).catch(() => {
+		ElMessage.error("服务器访问错误");
+	});
+	instantce?.appContext.config.globalProperties.$http.get('/report/student/piechart').then((res: any) => {
+		if(res.data.status==0){
+			tab3.value = res.data.data;
+			options2.labels = tab3.value.map((item: any) => item.level)
+			options2.datasets.push({data:tab3.value.map((item: any) => item.studentNumber)})
+		}
+		else{
+			ElMessage.error(res.data.msg);
+		}
+	}).catch(() => {
+		ElMessage.error("服务器访问错误");
+	});
+	instantce?.appContext.config.globalProperties.$http.get('/report/teacher/piechart').then((res: any) => {
+		if(res.data.status==0){
+			tab4.value = res.data.data;
+			options3.labels = tab4.value.map((item: any) => item.professionalTitles)
+			options3.datasets.push({data:tab4.value.map((item: any) => item.teacherNumber)})
+		}
+		else{
+			ElMessage.error(res.data.msg);
+		}
+	}).catch(() => {
+		ElMessage.error("服务器访问错误");
+	});
+};
+getData();
 </script>
 
 <style scoped>
