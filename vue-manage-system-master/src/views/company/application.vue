@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="form-box">
-            <el-form ref="formRef" :rules="rules" :model="form" label-width="80px">
+            <el-form ref="formRef" :model="form" label-width="80px">
                 <el-form-item label="公司名称" prop="name">
                     <el-input v-model="form.companyName"></el-input>
                 </el-form-item>
@@ -16,8 +16,8 @@
                 </el-form-item>
 
                 <el-form-item>
-                    <el-button type="primary" @click="">表单提交</el-button>
-                    <el-button @click="">重置表单</el-button>
+                    <el-button type="primary" @click="addApplication">表单提交</el-button>
+                    <!-- <el-button @click="">重置表单</el-button> -->
                 </el-form-item>
                 
             </el-form>
@@ -26,53 +26,49 @@
 </template>
 
 <script setup lang="ts" name="baseform">
-import { reactive, ref } from 'vue';
+import { ref, reactive,getCurrentInstance, computed} from "vue";
 import { ElMessage } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
-const rules: FormRules = {
-    name: [{ required: true, message: '请输入表单名称', trigger: 'blur' }],
-};
-const formRef = ref<FormInstance>();
+interface TableItem {
+    costExpectation: number,
+    companyName: string,
+    course: string,
+  }
 
-const form = reactive({
-    costExpectation: '',
+  interface application{
+    costExpectation: number,
+    companyName: string,
+    course: string,
+  }
+
+  const form = reactive({
+    costExpectation: 0,
+    companyName: '',
+    course: '',
+  })
+
+const newApplication: application= reactive({
+    costExpectation: 0,
     companyName: '',
     course: '',
 });
 
-// const course = reactive({
-//     courseTitle: '',
-//     startTime: '',
-//     endTime: '',
-//     location: '',
-//     company: '',
-//     cost: '',
-// });
-
-// const teacher = reactive({
-//     teacherName: '',
-//     professionalTitles: '',
-//     specialization: '',
-//     email: '',
-//     phone: '',
-// });
+const tableData = ref<TableItem[]>([]);
+const instance = getCurrentInstance();
 
 // 提交
-const onSubmit = (formEl: FormInstance | undefined) => {
-    // 表单校验
-    if (!formEl) return;
-    formEl.validate((valid) => {
-        if (valid) {
-            console.log(form);
-            ElMessage.success('提交成功！');
-        } else {
-            return false;
+const addApplication=()=>{
+    instance?.appContext.config.globalProperties.$http.post("/student/info",newApplication)
+    .then((res:any)=>{
+        if(res.data.status===0){
+            ElMessage.success("添加成功")
         }
-    });
-};
-// 重置
-const onReset = (formEl: FormInstance | undefined) => {
-    if (!formEl) return;
-    formEl.resetFields();
-};
+        else {
+            ElMessage.error(res.data.msg);
+        }
+    })
+  .catch(()=>{
+    ElMessage.error('服务器访问异常');
+  })
+}
 </script>
