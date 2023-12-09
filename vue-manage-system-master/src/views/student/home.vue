@@ -8,7 +8,7 @@
     >
         <el-descriptions-item label="姓名">{{ studentInfo.studentName }}</el-descriptions-item>
         <el-descriptions-item label="性别">{{ studentInfo.gender }}</el-descriptions-item>
-        <el-descriptions-item label="company" :span="2">{{ studentInfo.company }}</el-descriptions-item>
+        <el-descriptions-item label="公司" :span="2">{{ studentInfo.company }}</el-descriptions-item>
         <el-descriptions-item label="工作岗位">
           <el-tag size="large">{{ studentInfo.position }}</el-tag>
         </el-descriptions-item>
@@ -113,7 +113,7 @@ const form = reactive({
   desc: '',
 })
 
-const studentInfo: student = reactive({
+const studentInfo: any = ref<any>({
   studentName: "无",
   gender: "无",
   company: "无",
@@ -132,20 +132,19 @@ const newStudent: student = reactive({
 })
 
 const instance = getCurrentInstance();
-const tableData = ref<student[]>([]);
 
 const getData = () => {
-  instance?.appContext.config.globalProperties.$http.get("/admin/student/list")
+  instance?.appContext.config.globalProperties.$http.get("/student/index")
   .then((res:any) => {
     if(res.data.status===0){
-      tableData.value = res.data.data
+      studentInfo.value = res.data.data
     }
     else{
       ElMessage.error(res.data.msg);
     }
-  });
-  fetchData().then((res) => {
-    tableData.value = res.data.list;
+  })
+  .catch(()=>{
+    ElMessage.error('服务器访问异常');
   });
 };
 getData();
