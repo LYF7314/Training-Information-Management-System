@@ -56,12 +56,12 @@ import { useSidebarStore } from '../store/sidebar';
 import { useRoute } from 'vue-router';
 
 const items = [
-    {
-        icon: 'DataLine',
-        index: '/dashboard',
-        title: '系统首页',
-        permiss: '1',
-    },
+    // {
+    //     icon: 'DataLine',
+    //     index: '/dashboard',
+    //     title: '系统首页',
+    //     permiss: '1',
+    // },
 
     // {
     //     icon: 'Calendar',
@@ -142,14 +142,14 @@ const items = [
     //     index: '/charts',
     //     title: 'schart图表',
     //     permiss: '11',
-    // },
+    // // },
 
-    {
-        icon: 'Warning',
-        index: '/permission',
-        title: '权限管理',
-        permiss: '13',
-    },
+    // {
+    //     icon: 'Warning',
+    //     index: '/permission',
+    //     title: '权限管理',
+    //     permiss: '13',
+    // },
 
     // {
     //     icon: 'CoffeeCup',
@@ -158,26 +158,26 @@ const items = [
     //     permiss: '14',
     // },
 
-    {
-        icon: 'Reading',
-        index: '/courseInfo',
-        title: '课程管理',
-        permiss: '15',
-    },
+    // {
+    //     icon: 'Reading',
+    //     index: '/courseInfo',
+    //     title: '课程管理',
+    //     permiss: '15',
+    // },
 
-    {
-        icon:'User',
-        index:'/studentInfo',
-        title:'学生管理',
-        permiss:'15',
-    },
+    // {
+    //     icon:'User',
+    //     index:'/studentInfo',
+    //     title:'学生管理',
+    //     permiss:'15',
+    // },
 
-    {
-        icon:'Avatar',
-        index:'/teacherInfo',
-        title:'教师管理',
-        permiss:'15',
-    },
+    // {
+    //     icon:'Avatar',
+    //     index:'/teacherInfo',
+    //     title:'教师管理',
+    //     permiss:'15',
+    // },
 
     {
         icon:'Message',
@@ -200,19 +200,19 @@ const items = [
         permiss:'15',
     },
 
-    {
-        icon:'DocumentAdd',
-        index:'/managerNotification',
-        title:'课程设置',
-        permiss:'15',
-    },
+    // {
+    //     icon:'DocumentAdd',
+    //     index:'/managerNotification',
+    //     title:'课程设置',
+    //     permiss:'15',
+    // },
 
-    {
-        icon:'Connection',
-        index:'/companyApplication',
-        title:'培训需求',
-        permiss:'15',
-    },
+    // {
+    //     icon:'Connection',
+    //     index:'/companyApplication',
+    //     title:'培训需求',
+    //     permiss:'15',
+    // },
 
     // {
     //     icon:'DataLine',

@@ -22,7 +22,8 @@ export default defineConfig({
 	server:{
 		proxy: {
 			'/api':{
-				target:"http://10.240.71.33:9090", //跨域地址
+				//target:"http://10.240.71.33:9090", //跨域地址
+				target:"localhost:9090",
             	changeOrigin:true, //支持跨域
             	rewrite:(path) => path.replace(/^\/api/, "")//重写路径,替换/api
 			}
