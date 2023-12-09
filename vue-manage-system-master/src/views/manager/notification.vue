@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="form-box">
-            <el-form ref="formRef" :rules="rules" :model="form" label-width="80px">
+            <el-form ref="formRef" :model="form" label-width="80px">
                 <el-form-item label="课程名称" prop="name">
                     <el-input v-model="form.courseTitle"></el-input>
                 </el-form-item>
@@ -64,7 +64,7 @@
                 </el-form-item>
 
                 <el-form-item>
-                    <el-button type="primary" @click="onSubmit(formRef)">表单提交</el-button>
+                    <el-button type="primary" @click="addCourseInfo">表单提交</el-button>
                     <el-button @click="onReset(formRef)">重置表单</el-button>
                 </el-form-item>
                 
@@ -77,9 +77,8 @@
 import { reactive, ref } from 'vue';
 import { ElMessage } from 'element-plus';
 import type { FormInstance, FormRules } from 'element-plus';
-const rules: FormRules = {
-    name: [{ required: true, message: '请输入表单名称', trigger: 'blur' }],
-};
+import { getCurrentInstance } from 'vue';
+
 const formRef = ref<FormInstance>();
 // interface course {
 //     courseTitle: String,
@@ -98,6 +97,20 @@ const formRef = ref<FormInstance>();
 //     phone: String,
 // }
 
+interface form {
+  courseTitle: string;
+  startTime: string;
+  endTime: string;
+  location: string;
+  company: string;
+  cost: string;
+  teacherName: string,
+  professionalTitles: string,
+  specialization: string,
+  email: string,
+  phone: string
+}
+
 const form = reactive({
     courseTitle: '',
     startTime: '',
@@ -112,36 +125,42 @@ const form = reactive({
     phone: '',
 });
 
-// const course = reactive({
-//     courseTitle: '',
-//     startTime: '',
-//     endTime: '',
-//     location: '',
-//     company: '',
-//     cost: '',
-// });
-
-// const teacher = reactive({
-//     teacherName: '',
-//     professionalTitles: '',
-//     specialization: '',
-//     email: '',
-//     phone: '',
-// });
-
-// 提交
-const onSubmit = (formEl: FormInstance | undefined) => {
-    // 表单校验
-    if (!formEl) return;
-    formEl.validate((valid) => {
-        if (valid) {
-            console.log(form);
-            ElMessage.success('提交成功！');
-        } else {
-            return false;
-        }
-    });
+const transformedData = {
+  teacher: {
+    teacherName: form.teacherName,
+    professionalTitles: form.professionalTitles,
+    specialization: form.specialization,
+    email: form.email,
+    phone: form.phone
+  },
+  course: {
+    courseTitle: form.courseTitle,
+    startTime: form.startTime,
+    endTime: form.endTime,
+    location: form.location,
+    company: form.company,
+    cost: parseFloat(form.cost) // 将字符串转换为数字
+  }
 };
+
+const instance = getCurrentInstance();
+
+const addCourseInfo=()=>{
+  instance?.appContext.config.globalProperties.$http.post("/student/info",transformedData)
+  .then((res:any)=>{
+    if(res.data.status===0){
+      ElMessage.success("添加成功")
+    }
+    else{
+      ElMessage.error(res.data.msg);
+    }
+  })
+  .catch(()=>{
+    ElMessage.error('服务器访问异常');
+  })
+}
+
+
 // 重置
 const onReset = (formEl: FormInstance | undefined) => {
     if (!formEl) return;

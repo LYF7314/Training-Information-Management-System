@@ -208,7 +208,16 @@ const routes: RouteRecordRaw[] = [
                     permiss: '15',
                 },
                 component: () => import(/* webpackChunkName: "import" */ '../views/company/application.vue'),
-            }
+            },
+            // {
+            //     path: '/report',
+            //     name: 'report',
+            //     meta: {s
+            //         title: '报表',
+            //         permiss: '15',
+            //     },
+            //     component: () => import(/* webpackChunkName: "import" */ '../views/manager/report.vue'),
+            // }
         ],
     },
     {
